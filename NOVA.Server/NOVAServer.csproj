@@ -7,6 +7,7 @@
     <SpaRoot>..\nova.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:50096</SpaProxyServerUrl>
+    <UserSecretsId>9ca279d7-5f8b-4f91-bf44-73b1f25d3f09</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,10 +15,16 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>9.*-*</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\nova.client\nova.client.esproj">
+    <ProjectReference Include="..\..\NOVAData\NOVAData.csproj" />
+    <ProjectReference Include="..\nova.client\NOVAClient.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

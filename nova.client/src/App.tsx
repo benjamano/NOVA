@@ -50,7 +50,7 @@ function App() {
     );
 
     async function getTasks() {
-        const response = await fetch('NovaAPI/GetAllTasks');
+        const response = await fetch("NovaAPI/GetAllTasks");
         if (response.ok) {
             const data = await response.json();
             setTasks(data);

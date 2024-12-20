@@ -1,20 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NOVA.Server.Models;
+using NOVA.NOVAData.Models;
+using NOVA.NOVAData.DBContext;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-[ApiController]
-[Route("NovaApi")]
-public class NovaController : ControllerBase
+namespace NOVA.Server.Controllers
 {
-    [HttpGet("GetAllTasks")]
-    public IEnumerable<_Task> AllTasks()
+    [ApiController]
+    [Route("[controller]")]
+    public class NovaController : ControllerBase
     {
-        return Enumerable.Range(1, 5).Select(index => new _Task
+        private readonly AppDbContext _context;
+
+        public NovaController(AppDbContext context)
         {
-            Id = index,
-            Title = $"Task {index}",
-            Description = $"This is a description for Task {index}",
-            Status = "Pending",
-            DueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(index))
-        }).ToArray();
+            _context = context;
+        }
+
+        [HttpGet("GetAllTasks")]
+        public async Task<IActionResult> AllTasks()
+        {
+            return Ok(await _context.Tasks.ToListAsync());
+        }
     }
 }
