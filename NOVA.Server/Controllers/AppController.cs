@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace NOVA.Server.Controllers
 {
     [ApiController]
-    [Route("NovaAPI")]
+    [Route("[controller]")]
     public class AppController : ControllerBase
     {
-        [HttpGet("Home")]
+        [HttpGet("")]
         public IActionResult HomePage()
         {
             return Ok("Welcome to the Nova API!");
