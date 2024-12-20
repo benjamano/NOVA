@@ -68,9 +68,9 @@ function App() {
     };
   
     const taskDataTable = isLoading ? (
-        <p><em>Loading...</em></p>
-    ) : (
-        <table className="table table-striped" aria-labelledby="tableLabel">
+        <p><em className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></em></p>)
+        :
+        ( <table className="table table-striped" aria-labelledby="tableLabel">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -105,7 +105,7 @@ function App() {
         <div>
             <h1 id="tableLabel">Your Tasks</h1>
             {taskDataTable}
-            <button id="addNewTaskbtn" onClick={showNewTaskInputs}>+</button>
+            <button id="addNewTaskbtn" className="addNewTaskbtn" onClick={showNewTaskInputs}>+</button>
         </div>
     );
 }  
