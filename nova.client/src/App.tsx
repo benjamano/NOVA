@@ -1,28 +1,48 @@
-import { useEffect, useState } from 'react';  
-import './App.css';  
+import { useEffect, useState } from 'react';
+import './App.css';
 import $ from 'jquery';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-interface Task {  
-    id: number;  
-    title: string;  
-    description: string;  
-    status: string;  
-    dueDate: string;  
-}  
-  
-function App() {  
-    const [tasks, setTasks] = useState<Task[]>();  
+interface Task {
+    taskId: number;
+    title: string;
+    description: string;
+    status: string;
+    dueDate: string;
+}
+
+function App() {
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [showNewTaskForm, setShowNewTaskForm] = useState<boolean>(false);
-  
-    useEffect(() => {  
-        fetchTasks();  
-    }, []);  
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
 
     const showNewTaskInputs = () => {
         $("#addNewTaskbtn").hide();
         setShowNewTaskForm(true);
     };
+
+    const renderStatus = (status: string) => {
+        var colour = "#80808042";
+
+        switch (status) {
+            case "Not Started":
+                break;
+            case "Blocked":
+                break;
+            case "In Progress":
+                break;
+            case "Complete":
+                break;
+        }
+
+        return (
+            <p style={{ padding: "0.3rem 0.8rem", borderRadius: "0.5rem", backgroundColor:colour }}>{status}</p>  
+        );
+    }
 
     const addNewTask = async () => {
         const newTask = {
@@ -66,48 +86,100 @@ function App() {
             setIsLoading(false);
         }
     };
-  
-    const taskDataTable = isLoading ? (
-        <p><em className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></em></p>)
-        :
-        ( <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Due Date</th>
-                </tr>
-            </thead>
-            <tbody id="taskTableTBody">
-                {tasks?.map((task) => (
-                    <tr key={task.id}>
-                        <td>{task.title}</td>
-                        <td>{task.description}</td>
-                        <td>{task.status}</td>
-                        <td>{task.dueDate}</td>
-                    </tr>
-                ))}
-                {showNewTaskForm && (
-                    <tr id="newTaskForm">
-                        <td><input id="taskTitle" type="text" placeholder="Title" /></td>
-                        <td><input id="taskDesc" type="text" placeholder="Description" /></td>
-                        <td><input id="taskStatus" type="text" placeholder="Status" /></td>
-                        <td><input id="taskDueDate" type="date" placeholder="Due Date" /></td>
-                        <td><button onClick={addNewTask}>Add Task</button></td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
+
+    const onDragEnd = async (result: any) => {
+        const { source, destination } = result;
+
+        if (!destination) return;
+
+        if (source.droppableId === destination.droppableId && source.index === destination.index) return;
+
+        const newTask = {
+            TaskId: source.index,
+            NewStatus: destination.droppableId,
+        };
+
+        try {
+            const response = await fetch('NovaAPI/ChangeTaskStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTask),
+            });
+
+            if (response.ok) {
+                fetchTasks();
+            } else {
+                console.error('Failed to add new task');
+            }
+        } catch (error) {
+            console.error('Error adding new task:', error);
+        }
+    };
+
+    const renderTasks = (status: string) => (
+        tasks
+            .filter((task) => task?.status === status)
+            .map((task, index) => (
+                <Draggable key={task?.taskId?.toString()} draggableId={task?.taskId?.toString()} index={task?.taskId}>
+                    {(provided) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="task">
+                            <p>{task.title}</p>
+                            <p>{task.description}</p>
+                            {/*<p>{renderStatus(task.status)}</p>*/}
+                            <p>{task.dueDate}</p>
+                        </div>
+                    )}
+                </Draggable>
+            ))
+    );
+
+    const DataBoardHeaders = (
+        <DragDropContext onDragEnd={onDragEnd}>
+            <div className="card">
+                <div className="card-body">
+                    <div className="row">
+                        {['Not Started', 'Blocked', 'In Progress', 'Complete'].map((status, index) => (
+                            <div className="col-3" key={index}>
+                                <div className="taskStatusContainer">
+                                    <h3>{status}</h3>
+                                    <Droppable droppableId={status}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                                className="taskContainer"
+                                                id={index.toString()}>
+                                                {renderTasks(status)}
+                                                {provided.placeholder}
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                    <button
+                                        id="addNewTaskbtn"
+                                        className="addNewTaskbtn"
+                                        onClick={showNewTaskInputs}>
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </DragDropContext>
     );
 
     return (
-        <div>
-            <h1 id="tableLabel">Your Tasks</h1>
-            {taskDataTable}
-            <button id="addNewTaskbtn" className="addNewTaskbtn" onClick={showNewTaskInputs}>+</button>
+        <div className="w-100">
+            {isLoading ? <p>Loading...</p> : DataBoardHeaders}
         </div>
     );
-}  
-  
+}
+
 export default App;

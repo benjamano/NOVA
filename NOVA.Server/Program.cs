@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using NOVA.NOVAData.DBContext;
+using NOVAData.DataControl;
 
 var builder = WebApplication.CreateBuilder(args);
 

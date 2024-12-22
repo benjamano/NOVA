@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace NOVA.Server.Controllers
+namespace NOVAServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]

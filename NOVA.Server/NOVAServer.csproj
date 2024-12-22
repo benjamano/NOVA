@@ -27,6 +27,7 @@
     <ProjectReference Include="..\nova.client\NOVAClient.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\NOVA.Data\NOVAData.csproj" />
   </ItemGroup>
 
 </Project>
