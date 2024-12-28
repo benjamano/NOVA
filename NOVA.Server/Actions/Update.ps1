@@ -8,7 +8,6 @@ dotnet restore ../../nova.data/NOVAData.csproj
 dotnet build --configuration Release ../../nova.data/NOVAData.csproj
 dotnet publish ../../nova.data/NOVAData.csproj -c Release -o /var/www/backend
 
-
 # React Frontend
 echo "Building frontend..."
 cd ../../nova.client
