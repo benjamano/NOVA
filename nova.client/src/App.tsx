@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import $ from 'jquery';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useEffect, useState } from "react";
+import "./App.css";
+import $ from "jquery";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 interface Task {
     taskId: number;
@@ -46,17 +46,17 @@ function App() {
 
     const addNewTask = async () => {
         const newTask = {
-            Title: (document.getElementById('taskTitle') as HTMLInputElement).value,
-            Description: (document.getElementById('taskDesc') as HTMLInputElement).value,
-            Status: (document.getElementById('taskStatus') as HTMLInputElement).value,
-            DueDate: (document.getElementById('taskDueDate') as HTMLInputElement).value,
+            Title: (document.getElementById("taskTitle") as HTMLInputElement).value,
+            Description: (document.getElementById("taskDesc") as HTMLInputElement).value,
+            Status: (document.getElementById("taskStatus") as HTMLInputElement).value,
+            DueDate: (document.getElementById("taskDueDate") as HTMLInputElement).value,
         };
 
         try {
-            const response = await fetch('NovaAPI/AddNewTask', {
-                method: 'POST',
+            const response = await fetch("NovaAPI/AddNewTask", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(newTask),
             });
@@ -66,22 +66,22 @@ function App() {
                 fetchTasks();
                 $("#addNewTaskbtn").show();
             } else {
-                console.error('Failed to add new task');
+                console.error("Failed to add new task");
             }
         } catch (error) {
-            console.error('Error adding new task:', error);
+            console.error("Error adding new task:", error);
         }
     };
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch('NovaAPI/GetAllTasks');
+            const response = await fetch("NovaAPI/GetAllTasks");
             if (response.ok) {
                 const data = await response.json();
                 setTasks(data);
             }
         } catch (error) {
-            console.error('Error fetching tasks:', error);
+            console.error("Error fetching tasks:", error);
         } finally {
             setIsLoading(false);
         }
@@ -100,10 +100,10 @@ function App() {
         };
 
         try {
-            const response = await fetch('NovaAPI/ChangeTaskStatus', {
-                method: 'POST',
+            const response = await fetch("NovaAPI/ChangeTaskStatus", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(newTask),
             });
@@ -111,10 +111,10 @@ function App() {
             if (response.ok) {
                 fetchTasks();
             } else {
-                console.error('Failed to add new task');
+                console.error("Failed to add new task");
             }
         } catch (error) {
-            console.error('Error adding new task:', error);
+            console.error("Error adding new task:", error);
         }
     };
 
@@ -144,7 +144,7 @@ function App() {
             <div className="card">
                 <div className="card-body">
                     <div className="row">
-                        {['Not Started', 'Blocked', 'In Progress', 'Complete'].map((status, index) => (
+                        {["Not Started", "Blocked", "In Progress", "Complete"].map((status, index) => (
                             <div className="col-3" key={index}>
                                 <div className="taskStatusContainer">
                                     <h3>{status}</h3>
