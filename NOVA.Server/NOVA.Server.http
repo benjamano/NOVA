@@ -1,6 +1,0 @@
-@NOVA.Server_HostAddress = http://localhost:5232
-
-GET {{NOVA.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
